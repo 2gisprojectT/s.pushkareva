@@ -16,9 +16,16 @@ class Lion:
     def start(self,state):
         self.state=state
 
-    def view(self,obj): #print data
+    def find_obj(self,obj):
         if((self.state,obj) in self.table):
             self.obj=obj
+            return True
+        else:
+            return False
+
+
+    def view(self,obj):
+        if(self.find_obj(obj)):
             print "I",self.state, "and I see",self.obj
             self.newData()
             print "Now my action is", self.action, "and my state is", self.state,"\n"
@@ -30,7 +37,7 @@ class Lion:
     def get_action(self):#action
         return self.table[(self.state,self.obj)][1]
 
-    def newData(self):#get action and new state
+    def newData(self):
         self.action=self.get_action()
         new_state=self.get_state()
         if(new_state is not None):
