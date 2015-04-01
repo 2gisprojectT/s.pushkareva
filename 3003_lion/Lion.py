@@ -1,4 +1,7 @@
+__author__ = 'neliko'
+
 class Lion:
+    obj=""
     def __init__(self):
         self.state=""
         self.action=""
@@ -14,8 +17,27 @@ class Lion:
         self.state=state
 
     def view(self,obj):
-         print "Now my state is", self.state
+         self.obj=obj
+         print "I",self.state, "and I see",self.obj
+         self.newData()
+         print "Now my action is", self.action, "and my state is", self.state,"\n"
 
+
+    def get_state(self):#next state
+        return self.table[(self.state,self.obj)][0]
+    def get_action(self):#action
+        return self.table[(self.state,self.obj)][1]
+
+    def newData(self):
+        self.action=self.get_action()
+        new_state=self.get_state()
+        if(new_state is not None):
+            self.state=new_state
+        return
 lion=Lion()
 lion.start("fed")
 lion.view("antilope")
+lion.view("antilope")
+lion.view("hunter")
+lion.view("antilope")
+lion.view("tree")
