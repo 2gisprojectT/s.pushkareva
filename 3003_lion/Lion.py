@@ -1,9 +1,9 @@
 __author__ = 'neliko'
 
 class Lion:
-    obj=""
+    input_object=""
     def __init__(self):
-        self.state=""
+        self.state="fed"
         self.action=""
         self.table={
             ("hungry","antilope"):("fed","eat"),
@@ -13,29 +13,27 @@ class Lion:
             ("fed","hunter"):("hungry","run"),
             ("fed","tree"):("hungry","see")
         }
-    def start(self,state):
-        self.state=state
-
-    def find_obj(self,obj):
-        if((self.state,obj) in self.table):
-            self.obj=obj
+    def find_obj(self,input_object):
+        if((self.state,input_object) in self.table):
+            self.input_object=input_object
             return True
         else:
             return False
 
 
-    def view(self,obj):
-        if(self.find_obj(obj)):
-            print ("I",self.state, "and I see",self.obj)
+    def view(self,input_object):
+        if(self.find_obj(input_object)):
+            print ("I",self.state, "and I see",self.input_object)
             self.newData()
             print ("Now my action is", self.action, "and my state is", self.state,"\n")
         else:
             print ("I don't know what is it!\n")
 
     def get_state(self):#next state
-        return self.table[(self.state,self.obj)][0]
+        return self.table[(self.state,self.input_object)][0]
+
     def get_action(self):#action
-        return self.table[(self.state,self.obj)][1]
+        return self.table[(self.state,self.input_object)][1]
 
     def newData(self):
         self.action=self.get_action()
@@ -44,10 +42,21 @@ class Lion:
             self.state=new_state
         return
 
-lion=Lion()
-lion.start("fed")
-lion.view("antilope")
-lion.view("antilope")
-lion.view("hunter")
-lion.view("hunter")
-lion.view("cat")
+
+if __name__ == '__main__':
+
+    # Initialization
+   lion=Lion()
+   print("Лев сыт")
+   while True:
+
+        print('Выберите один из объектов:\n antilope, hunter, tree')
+        print('Введите объект или exit для выхода')
+        data = input()
+        if data == 'exit':
+            break
+        else:
+            print("Реакция Льва:")
+            lion.view(data)
+
+
