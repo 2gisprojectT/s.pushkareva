@@ -26,11 +26,11 @@ class Lion:
 
     def view(self,obj):
         if(self.find_obj(obj)):
-            print "I",self.state, "and I see",self.obj
+            print ("I",self.state, "and I see",self.obj)
             self.newData()
-            print "Now my action is", self.action, "and my state is", self.state,"\n"
+            print ("Now my action is", self.action, "and my state is", self.state,"\n")
         else:
-            print "I don't know what is it!\n"
+            print ("I don't know what is it!\n")
 
     def get_state(self):#next state
         return self.table[(self.state,self.obj)][0]
