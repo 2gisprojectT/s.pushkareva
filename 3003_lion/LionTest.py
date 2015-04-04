@@ -6,114 +6,90 @@ import unittest
 
 
 class LionTest(TestCase):
+    table = {
+        ("hungry", "antelope"): ("fed", "eat"),
+        ("hungry", "hunter"): (None, "run"),
+        ("hungry", "tree"): (None, "sleep"),
+        ("fed", "antelope"): ("hungry", "sleep"),
+        ("fed", "hunter"): ("hungry", "run"),
+        ("fed", "tree"): ("hungry", "see")
+    }
 
     def test_init(self):
-        lion=Lion("fed")
-        self.assertEqual("fed",lion.state, 'State is not correct')
-        self.assertEqual("",lion.input_object,'Input object is not correct')
-        self.assertEqual("",lion.action, 'Action is not correct')
+        lion = Lion("fed", self.table)
 
+        self.assertEqual("fed", lion.state, 'Init:State is not correct')
+        self.assertEqual("", lion.input_object, 'Init:Input object is not correct')
+        self.assertEqual("", lion.action, 'Init:Action is not correct')
+        self.assertEqual(self.table, lion.table, 'Init:Table is not correct')
 
+    def test_findAntelope(self):  # тестирование поиска объекта в таблице
+        lion = Lion("fed", self.table)
+        self.assertTrue(lion.find_obj("antelope"), 'Antelope_find:Return not true')  # Лев сыт
+        lion.state = "hungry"
+        self.assertTrue(lion.find_obj("antelope"), 'Antelope_find:Return not true')  # Лев голоден
 
-    def test_get_state(self):
-        lion=Lion("fed")
-        lion.find_obj("antilope")
-        self.assertEqual("hungry",lion.get_state(),'Get_state:State have wrong value')
-        lion.state="hungry"
-        self.assertEqual("fed",lion.get_state(),'Get_state:State have wrong value')
-
-    def test_get_action(self):
-        lion=Lion("fed")
-        lion.find_obj("antilope")
-        self.assertEqual("sleep",lion.get_action(),'Get_action:Action have wrong value')
-        lion.state="hungry"
-        self.assertEqual("eat",lion.get_action(),'Get_action:Action have wrong value')
-
-    def test_findAntilope(self):
-         lion=Lion("fed")
-         self.assertEqual(True,lion.find_obj("antilope"),'Antilope_find:Return not true')
-         lion=Lion("hungry")
-         self.assertEqual(True,lion.find_obj("antilope"),'Antilope_find:Return not true')
-
-         lion.find_obj("antilope")
-         self.assertEqual("antilope",lion.input_object,'Antilope_find:Input object is not correct')
+        self.assertEqual("antelope", lion.input_object, 'Antelope_find:Input object is not correct')
 
     def test_findHunter(self):
-         lion=Lion("fed")
-         self.assertEqual(True,lion.find_obj("hunter"),'Hunter_find:Return not true')
-         lion=Lion("hungry")
-         self.assertEqual(True,lion.find_obj("hunter"),'Hunter_find:Return not true')
+        lion = Lion("fed", self.table)
+        self.assertTrue(lion.find_obj("hunter"), 'Hunter_find:Return not true')
+        lion.state = "hungry"
+        self.assertTrue(lion.find_obj("hunter"), 'Hunter_find:Return not true')
 
-         lion.find_obj("hunter")
-         self.assertEqual("hunter",lion.input_object,'Hunter_find:Input object is not correct')
+        self.assertEqual("hunter", lion.input_object, 'Hunter_find:Input object is not correct')
 
     def test_findTree(self):
-         lion=Lion("fed")
-         self.assertEqual(True,lion.find_obj("tree"),'Tree_find:Return not true')
-         lion=Lion("hungry")
-         self.assertEqual(True,lion.find_obj("tree"),'Tree_find:Return not true')
+        lion = Lion("fed", self.table)
+        self.assertTrue(lion.find_obj("tree"), 'Tree_find:Return not true')
+        lion.state = "hungry"
+        self.assertTrue(lion.find_obj("tree"), 'Tree_find:Return not true')
 
-         lion.find_obj("tree")
-         self.assertEqual("tree",lion.input_object,'Tree_find:Input object is not correct')
+        self.assertEqual("tree", lion.input_object, 'Tree_find:Input object is not correct')
 
     def test_findUnknown(self):
-         lion=Lion("fed")
-         self.assertEqual(False,lion.find_obj("frog"),'Unknown_find:Return not true')
-         lion=Lion("hungry")
-         self.assertEqual(False,lion.find_obj("frog"),'Tree_find:Return not true')
+        lion = Lion("fed", self.table)
+        self.assertFalse(lion.find_obj("frog"), 'Unknown_find:Return not true')
+        lion.state = "hungry"
+        self.assertFalse(lion.find_obj("frog"), 'Unknown_find:Return not true')
 
-         lion.find_obj("frog")
-         self.assertEqual("",lion.input_object,'Unknown_find:Input object is not correct')
+        self.assertEqual("", lion.input_object, 'Tree_find:Input object is not correct')
 
-    def test_newDataAntilopeFed(self):
-        lion=Lion("fed")
-        lion.find_obj("antilope")
-        lion.newData()
+    def test_viewAntelope(self):  # тестирование реакции льва
+        lion = Lion("fed", self.table)
+        lion.find_obj("antelope")
+        # Лев сыт
+        lion.view()
+        self.assertEqual("hungry", lion.state, 'Antelope_fed_view:State is not correct')
+        self.assertEqual("sleep", lion.action, 'Antelope_fed_view:Action is not correct')
+        # Лев голоден
+        lion.view()
+        self.assertEqual("fed", lion.state, 'Antelope_hungry_view:State is not correct')
+        self.assertEqual("eat", lion.action, 'Antelope_hungry_view:Action is not correct')
 
-        self.assertEqual("hungry",lion.state,'Antilope_fed:State is not correct')
-        self.assertEqual("sleep",lion.action,'Antilope_fed:Action is not correct')
-
-    def test_newDataAntilopeHungry(self):
-        lion=Lion("hungry")
-        lion.find_obj("antilope")
-        lion.newData()
-
-        self.assertEqual("fed",lion.state,'Antilope_hungry:State is not correct')
-        self.assertEqual("eat",lion.action,'Antilope_hungry:Action is not correct')
-
-    def test_newDataHunterFed(self):
-        lion=Lion("fed")
+    def test_viewHunter(self):
+        lion = Lion("fed", self.table)
         lion.find_obj("hunter")
-        lion.newData()
 
-        self.assertEqual("hungry",lion.state,'Hunter_fed:State is not correct')
-        self.assertEqual("run",lion.action,'Hunter_fed:Action is not correct')
+        lion.view()
+        self.assertEqual("hungry", lion.state, 'Hunter_fed_view:State is not correct')
+        self.assertEqual("run", lion.action, 'Hunter_fed_view:Action is not correct')
 
-    def test_newDataHunterHungry(self):
-        lion=Lion("hungry")
-        lion.find_obj("hunter")
-        lion.newData()
+        lion.view()
+        self.assertEqual("hungry", lion.state, 'Hunter_hungry_view:State is not correct')
+        self.assertEqual("run", lion.action, 'Hunter_hungry_view:Action is not correct')
 
-        self.assertEqual("hungry",lion.state,'Hunter_hungry:State is not correct')
-        self.assertEqual("run",lion.action,'Hunter_hungry:Action is not correct')
-
-    def test_newDataTreeFed(self):
-        lion=Lion("fed")
+    def test_viewTree(self):
+        lion = Lion("fed", self.table)
         lion.find_obj("tree")
-        lion.newData()
 
-        self.assertEqual("hungry",lion.state,'Tree_fed:State is not correct')
-        self.assertEqual("see",lion.action,'Tree_fed:Action is not correct')
+        lion.view()
+        self.assertEqual("hungry", lion.state, 'Tree_fed_view:State is not correct')
+        self.assertEqual("see", lion.action, 'Tree_fed_view:Action is not correct')
 
-    def test_viewTreeHungry(self):
-        lion=Lion("hungry")
-        lion.find_obj("tree")
-        lion.newData()
-
-        self.assertEqual("hungry",lion.state,'Tree_fed:State is not correct')
-        self.assertEqual("sleep",lion.action,'Tree_fed:Action is not correct')
-
-
+        lion.view()
+        self.assertEqual("hungry", lion.state, 'Tree_hungry_view:State is not correct')
+        self.assertEqual("sleep", lion.action, 'Tree_hungry_view:Action is not correct')
 
 
 if __name__ == '__main__':
