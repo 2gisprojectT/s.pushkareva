@@ -3,9 +3,12 @@ __author__ = 'neliko'
 
 class Lion:
     def __init__(self, state, table):
+        if state == "":
+            raise Exception('Empty initial state')
         self.state = state
         self.action = ""
         self.table = table
+
 
     def isKnowObject(self, input_object):
         if (self.state, input_object) in self.table:
