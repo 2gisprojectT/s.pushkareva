@@ -22,20 +22,14 @@ class SeleniumWD(TestCase):
     def test_search(self):
         self.assertTrue("Google" in self.page.title, "Ожидаемое значение не найдено в заголовке")
         self.page.search_bar.search("Cats")
-        try:
-            self.assertEqual("Cats", self.page.search_bar.value, "Невернное значение")
-            self.assertEqual("lst-ib", self.page.search_bar.id, "Неверный id")
-        finally:
-            return
+        self.assertEqual("Cats", self.page.search_bar.value, "Невернное значение")
+        self.assertEqual("lst-ib", self.page.search_bar.id, "Неверный id")
 
     def test_search2(self):
         self.page.search_bar.search("vjkjrj")
         print(self.page.expected_result.expected_text)
-        try:
-            self.assertTrue("Возможно, вы имели в виду" in self.page.page_source, "Не найдена ожидаемая строка")
-            self.assertEqual("молоко", self.page.expected_result.expected_text, 'Неверный возможный результат')
-        finally:
-            return
+        self.assertTrue("Возможно, вы имели в виду" in self.page.page_source, "Не найдена ожидаемая строка")
+        self.assertEqual("молоко", self.page.expected_result.expected_text, 'Неверный возможный результат')
 
 
 if __name__ == '__main__':
